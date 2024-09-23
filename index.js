@@ -15,9 +15,19 @@ app.use(express.json());
 
 //mongoDB
 //new
-const username = process.env.MONGODB_USERNAME;
-const password = process.env.MONGODB_PASSWORD;
-const uri = `mongodb+srv://${encodeURIComponent(username)}:${encodeURIComponent(password)}@cluster0.odrw7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+const dbUrl = process.env.uri;
+
+main()
+.then(()=>{
+    console.log("connected to db");
+})
+.catch((err)=>{
+    console.log(err);
+});
+
+async function main(){
+    await mongoose.connect(dbUrl);
+};
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
