@@ -7,6 +7,7 @@ require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const port = process.env.PORT || 3000;
 const reviews = require("./reviews.json");
+const mongoose = require('mongoose');
 
 // middleware
 
@@ -15,7 +16,7 @@ app.use(express.json());
 
 //mongoDB
 //new
-const dbUrl = process.env.uri;
+const dbUrl = process.env.ATLASDB_URL;
 
 main()
 .then(()=>{
@@ -30,7 +31,7 @@ async function main(){
 };
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
+const client = new MongoClient(dbUrl, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
