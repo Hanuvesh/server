@@ -183,6 +183,24 @@ async function run() {
       res.send(result);
     });
     
+    app.patch("/api/v1/make-verified", async (req, res) => {
+      const id = req.query.id;
+      const filter = {_id : new ObjectId(id)}
+      const updateDoc = {
+        $set: { status: "verified" },
+      }
+      const result = await propertiesCollection.updateOne(filter,updateDoc);
+      res.send(result);
+    });
+    app.patch("/api/v1/make-rejected", async (req, res) => {
+      const id = req.query.id;
+      const filter = {_id : new ObjectId(id)}
+      const updateDoc = {
+        $set: { status: "rejected" },
+      }
+      const result = await propertiesCollection.updateOne(filter,updateDoc);
+      res.send(result);
+    });
     app.post("/api/v1/properties", async (req, res) => {
       const property = req.body;
       
@@ -196,6 +214,22 @@ async function run() {
       res.send(result);
     });
     
+    app.patch("/api/v1/users/fraud", async (req, res) => {
+      const id = req.query.id;
+      const email = req.query.email;
+     
+      const filter1 = {_id: new ObjectId(id)};
+      const filter2 = {agentEmail: email};
+      const updateDoc1 = {
+        $set : {role: "fraud"}
+      } 
+      const updateDoc2 = {
+        $set : {status: "fraud"}
+      } 
+      const result = await usersCollection.updateOne(filter1,updateDoc1);
+      const result2 = await propertiesCollection.updateMany(filter2,updateDoc2);
+      res.send({result,result2});
+    });
     // wishlist realated data
     app.post("/api/v1/wishlists", async (req, res) => {
       const wishlist = req.body;
